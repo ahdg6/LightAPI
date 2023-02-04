@@ -89,27 +89,16 @@ public class StarlightNMSHandler extends BaseNMSHandler {
     private Method starEngine_setupCaches;
     private Method starEngine_destroyCaches;
 
-    private final class LightTask implements BooleanSupplier {
-        private final ServerLevel worldServer;
-        private final StarLightEngine sle;
-        private final ChunkPos chunkCoordIntPair;
-        private final Set<LightPos> lightPoints;
-
-        public LightTask(ServerLevel worldServer, StarLightEngine sle,
-                         ChunkPos chunkCoordIntPair, Set<LightPos> lightPoints) {
-            this.worldServer = worldServer;
-            this.sle = sle;
-            this.chunkCoordIntPair = chunkCoordIntPair;
-            this.lightPoints = lightPoints;
-        }
-
-        public boolean getAsBoolean() {
+    private void addTaskToQueue(ServerLevel worldServer, StarLightInterface starLightInterface, StarLightEngine sle,
+                                ChunkPos chunkCoordIntPair, Set<LightPos> lightPoints)  {
+        int type = (sle instanceof BlockStarLightEngine) ? LightFlag.BLOCK_LIGHTING : LightFlag.SKY_LIGHTING;
+        scheduleChunkLight(starLightInterface, chunkCoordIntPair, () -> {
             try {
                 int chunkX = chunkCoordIntPair.x;
                 int chunkZ = chunkCoordIntPair.z;
-                int type = (sle instanceof BlockStarLightEngine) ? LightFlag.BLOCK_LIGHTING : LightFlag.SKY_LIGHTING;
+
                 if (!worldServer.getChunkSource().isChunkLoaded(chunkX, chunkZ)) {
-                    return false;
+                    return;
                 }
 
                 // blocksChangedInChunk -- start
@@ -155,17 +144,20 @@ public class StarlightNMSHandler extends BaseNMSHandler {
                 // blocksChangedInChunk -- end
             } catch (Exception ex) {
                 ex.printStackTrace();
-                return false;
             }
-            return true;
+        });
+    }
+    private void scheduleChunkLight(StarLightInterface starLightInterface, ChunkPos chunkCoordIntPair,
+                                    Runnable runnable) {
+        try {
+            Class<?> threadClazz = Class.forName("ca.spottedleaf.starlight.common.light.StarLightInterface$LightQueue");
+            Method method = threadClazz.getMethod("queueChunkLighting", ChunkPos.class, Runnable.class);
+            method.invoke(null, chunkCoordIntPair, runnable);
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
+            e.printStackTrace();
         }
     }
-    private void addTaskToQueue(ServerLevel worldServer, StarLightInterface starLightInterface, StarLightEngine sle,
-                                ChunkPos chunkCoordIntPair, Set<LightPos> lightPoints) {
-        final LightQueue lightQueue = starLightInterface.lightQueue;
-        ChunkLightTask chunkLightTask = new ChunkLightTask()
-        lightQueue.queueChunkLightTask(chunkCoordIntPair, new LightTask(worldServer, sle, chunkCoordIntPair, lightPoints), PrioritisedExecutor.Priority.HIGHEST);
-    }
+
 
     protected void executeSync(ThreadedLevelLightEngine lightEngine, Runnable task) {
             task.run();
