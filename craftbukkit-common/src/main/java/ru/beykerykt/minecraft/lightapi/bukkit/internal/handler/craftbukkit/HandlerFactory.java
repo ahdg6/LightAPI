@@ -47,6 +47,7 @@ public class HandlerFactory implements IHandlerFactory {
         for (String pkg : STARLIGHT_ENGINE_PKG) {
             try {
                 Class.forName(pkg);
+                getPlatformImpl().debug("Found Class" + pkg + ", Start using Starlight.");
                 return true;
             } catch (ClassNotFoundException e) {
                 getPlatformImpl().debug("Class " + pkg + " not found");
