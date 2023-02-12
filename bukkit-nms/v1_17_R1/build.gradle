@@ -1,0 +1,7 @@
+dependencies {
+    compileOnly project(':bukkit-common')
+    // Paper reobf
+    compileOnly fileTree(dir: 'lib', include: ['*.jar'])
+}
+
+description = 'lightapi-craftbukkit-nms-v1_17_R1'

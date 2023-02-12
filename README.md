@@ -1,4 +1,4 @@
-![Image](/images/logo5.png)
+![Image](/.github/logo5.png)
 
 # LightAPI
 
