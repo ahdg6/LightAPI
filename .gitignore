@@ -193,3 +193,4 @@ local.properties
 # Spring Boot Tooling
 .sts4-cache/
 bukkit-nms/v1_17_R1/lib/patched_1.17.1.jar
+bukkit-all/*.jar

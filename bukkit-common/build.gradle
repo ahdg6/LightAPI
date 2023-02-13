@@ -7,7 +7,6 @@ dependencies {
 processResources {
     filesMatching(['plugin.yml']) {
         expand version: rootProject.ext.pluginVersion
-		expand SERVER_API: 'Bukkit'
     }
 }
 

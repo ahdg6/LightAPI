@@ -16,10 +16,10 @@ dependencies {
     implementation project(':lightapi-craftbukkit-nms-v1_16_R2')
     implementation project(':lightapi-craftbukkit-nms-v1_16_R3')
     implementation project(':lightapi-craftbukkit-nms-v1_17_R1')
-    implementation project(':lightapi-craftbukkit-nms-v1_18_R1')
-    implementation project(':lightapi-craftbukkit-nms-v1_18_R2')
-    implementation project(':lightapi-craftbukkit-nms-v1_19_R1')
-    implementation project(':lightapi-craftbukkit-nms-v1_19_R2')
+    implementation project(path: ':lightapi-craftbukkit-nms-v1_18_R1', configuration: 'reobf')
+    implementation project(path: ':lightapi-craftbukkit-nms-v1_18_R2', configuration: 'reobf')
+    implementation project(path: ':lightapi-craftbukkit-nms-v1_19_R1', configuration: 'reobf')
+    implementation project(path: ':lightapi-craftbukkit-nms-v1_19_R2', configuration: 'reobf')
 }
 
 description = 'bukkit-all'
@@ -35,13 +35,11 @@ artifacts {
 def pluginVersion = rootProject.ext.pluginVersion
 def SERVER_API = 'Bukkit'
 
-defaultTasks 'clean', 'build'
-
 shadowJar {
     relocate("org.bstats", "ru.beykerykt.minecraft.lightapi.bukkit.bstats")
 
 	version = pluginVersion	
-    archiveBaseName = 'LightAPI-${SERVER_API}-${version}'
+    archiveBaseName = 'LightAPI-Bukkit'
     archiveClassifier.set('SNAPSHOT')
     manifest {
         attributes(

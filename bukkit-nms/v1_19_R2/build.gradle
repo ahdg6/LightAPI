@@ -9,17 +9,4 @@ dependencies {
     paperweight.paperDevBundle("1.19.3-R0.1-SNAPSHOT")
 }
 
-tasks {
-  assemble {
-    dependsOn(reobfJar)
-  }
-
-  compileJava {
-    options.encoding = 'UTF-8'
-    options.release.set(17)
-  }
-  javadoc { options.encoding = 'UTF-8' }
-  processResources { filteringCharset = 'UTF-8' }
-}
-
-description = 'lightapi-craftbukkit-nms-v1_18_R2'
+description = 'lightapi-craftbukkit-nms-v1_19_R2'

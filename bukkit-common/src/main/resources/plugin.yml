@@ -1,6 +1,6 @@
 name: LightAPI
 main: ru.beykerykt.minecraft.lightapi.bukkit.BukkitPlugin
-version: ${SERVER_API}-${version}
+version: ${version}
 description: Bukkit library for edit light levels
 api-version: 1.14
 author: BeYkeRYkt
